@@ -1,0 +1,20 @@
+### **.gitignore**
+```gitignore
+# Ignore build outputs
+bin/
+obj/
+
+# Ignore secrets
+appsettings*.json
+
+# Ignore Docker files
+docker-compose.override.yml
+
+# Ignore user-specific files
+*.user
+*.suo
+.vscode/
+.idea/
+
+# Ignore temporary files
+*.tmp
