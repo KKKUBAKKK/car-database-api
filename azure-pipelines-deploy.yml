@@ -1,0 +1,49 @@
+# Replace myContainerRegistry, AzureServiceConnection, 
+# k8s-resource-group, and k8s-cluster-name with 
+# your actual resource names.
+
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  imageName: 'car-database-api'
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '8.x'
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+# To be deleted if the rest is uncommented
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--configuration Release'
+
+# - task: Docker@2
+#   inputs:
+#     containerRegistry: 'myContainerRegistry' # Replace with your ACR service connection name
+#     repository: '$(imageName)'
+#     command: 'buildAndPush'
+#     Dockerfile: '**/Dockerfile'
+#     tags: '$(Build.BuildId)'
+
+# - task: Kubernetes@1
+#   inputs:
+#     connectionType: 'Azure Resource Manager'
+#     azureSubscription: 'AzureServiceConnection'
+#     azureResourceGroup: 'k8s-resource-group'
+#     kubernetesCluster: 'k8s-cluster-name'
+#     namespace: 'default'
+#     command: 'apply'
+#     useConfigurationFile: true
+#     configuration: './k8s/deployment.yml'
+#     containerName: '$(imageName)'
+#     imageName: '$(containerRegistry)/$(imageName):$(Build.BuildId)'
