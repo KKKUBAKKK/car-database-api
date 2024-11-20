@@ -4,3 +4,95 @@ GET {{car_database_api_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+POST {{car_database_api_HostAddress}}/api/car
+Content-Type: application/json
+
+{
+  "company": "Toyota",
+  "model": "Corolla",
+  "year": 2020,
+  "fuelType": "Petrol",
+  "category": "Medium",
+  "passengers": 5,
+  "color": "Blue",
+  "licensePlate": "ABC123",
+  "mileage": 15000,
+  "availability": "Available",
+  "location": "New York",
+  "fuelConsumption": 7.5
+}
+
+###
+
+### 1. Get Available Cars
+GET {{car_database_api_HostAddress}}/api/user/cars
+Authorization: Bearer YOUR_JWT_TOKEN
+
+### 2. Get Specific Car Details
+GET {{car_database_api_HostAddress}}/api/user/cars/1
+Authorization: Bearer YOUR_JWT_TOKEN
+
+### 3. Request Rental Offer
+POST {{car_database_api_HostAddress}}/api/user/rentals/offers
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN
+
+{
+  "carId": 1,
+  "customerId": 1,
+  "startDate": "2024-03-15",
+  "endDate": "2024-03-20"
+}
+
+### 4. Create Rental
+POST https://localhost:7123/api/user/rentals
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN
+
+{
+  "offerId": 1,
+  "customerId": 1,
+  "plannedStartDate": "2024-03-15",
+  "plannedEndDate": "2024-03-20"
+}
+
+### 5. Get My Rentals
+GET https://localhost:7123/api/user/rentals/my
+Authorization: Bearer YOUR_JWT_TOKEN
+
+###
+
+### 2. Get Available Cars
+GET {{car_database_api_HostAddress}}/api/user/cars
+Accept: application/json
+
+### 3. Get Specific Car Details
+GET {{car_database_api_HostAddress}}/api/user/cars/1
+Accept: application/json
+
+### 4. Request Rental Offer
+POST {{car_database_api_HostAddress}}/api/user/rentals/offers
+Content-Type: application/json
+
+{
+  "carId": 1,
+  "customerId": 1,
+  "startDate": "2024-03-15",
+  "endDate": "2024-03-20"
+}
+
+### 5. Create Rental
+POST {{car_database_api_HostAddress}}/api/user/rentals
+Content-Type: application/json
+
+{
+  "offerId": 1,
+  "customerId": 1,
+  "plannedStartDate": "2024-03-15",
+  "plannedEndDate": "2024-03-20"
+}
+
+### 6. Get My Rentals
+GET {{car_database_api_HostAddress}}/api/user/rentals/my
+Accept: application/json
