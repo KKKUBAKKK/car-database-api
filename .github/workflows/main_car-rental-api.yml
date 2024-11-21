@@ -55,6 +55,11 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_BD2AEC396C454B82A9A43A028A4CAE58 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_47C9BBF2D6C24F85893F847B40AB5569 }}
 
+      - name: Set up connection string
+        run: |
+          az webapp config connection-string set --resource-group car-database-api_group --name "car-rental-api" --settings "DefaultConnection=${{ secrets.AZURE_SQL_CONNECTION_STRING }}" --connection-string-type SQLAzure
+
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
