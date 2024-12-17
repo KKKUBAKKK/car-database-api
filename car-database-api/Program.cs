@@ -8,12 +8,11 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Set the environment variable
-// Environment.SetEnvironmentVariable("DOTNET_SYSTEM_GLOBALIZATION_INVARIANT", "0");
-
-// Set the culture info
-// CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
-// CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");
+// Load configuration from appsettings.json
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddEnvironmentVariables();
 
 // Load user secrets based on the environment
 if (builder.Environment.IsDevelopment())
@@ -26,11 +25,18 @@ else if (builder.Environment.IsProduction())
 }
 
 // Register the DbContext with the connection string from user secrets
-var connectionString = builder.Configuration.GetConnectionString(
-    builder.Environment.IsProduction() ? "DeploymentConnection" : "DevelopmentConnection") + ";TrustServerCertificate=True";
+// var connectionString = builder.Configuration.GetConnectionString(
+//     builder.Environment.IsProduction() ? "DeploymentConnection" : "DevelopmentConnection") + ";TrustServerCertificate=True";
+var connectionString = builder.Configuration.GetConnectionString("DeploymentConnection") + ";TrustServerCertificate=True";
 
 builder.Services.AddDbContext<CarRentalDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString, sqlOptions =>
+    {
+        sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(30),
+            errorNumbersToAdd: null);
+    }));
 
 // Add controllers
 builder.Services.AddControllers();
@@ -87,14 +93,6 @@ builder.Services.AddSwaggerGen(c =>
     
 // Build the service provider
 var app = builder.Build();
-
-
-// Set the environment variable
-// Environment.SetEnvironmentVariable("DOTNET_SYSTEM_GLOBALIZATION_INVARIANT", "false");
-
-// // Set the culture info
-// CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
-// CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

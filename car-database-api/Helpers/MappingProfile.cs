@@ -9,6 +9,7 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<Car, CarDto>();
+        CreateMap<CarCreateDto, Car>();
         // CreateMap<Car, CarDetailsDto>();
         CreateMap<User, UserDto>();
         CreateMap<Rental, RentalDto>()

@@ -1,4 +1,5 @@
 @car_database_api_HostAddress = http://localhost:5001
+@car_database_api_deployed = https://car-rental-api-chezbchwebfggwcd.canadacentral-01.azurewebsites.net
 
 GET {{car_database_api_HostAddress}}/weatherforecast/
 Accept: application/json
@@ -95,4 +96,51 @@ Content-Type: application/json
 
 ### 6. Get My Rentals
 GET {{car_database_api_HostAddress}}/api/user/rentals/my
+Accept: application/json
+
+### Add Car 1
+POST {{car_database_api_HostAddress}}/api/employee/cars
+Content-Type: application/json
+
+{
+  "Producer": "Toyota",
+  "Model": "Corolla",
+  "YearOfProduction": 2020,
+  "NumberOfSeats": 5,
+  "Type": 1,
+  "IsAvailable": true,
+  "Location": "New York"
+}
+
+### Add Car 2
+POST {{car_database_api_HostAddress}}/api/employee/cars
+Content-Type: application/json
+
+{
+  "Producer": "Honda",
+  "Model": "Civic",
+  "YearOfProduction": 2019,
+  "NumberOfSeats": 5,
+  "Type": 2,
+  "IsAvailable": true,
+  "Location": "Los Angeles"
+}
+
+### Add Car 3
+POST {{car_database_api_HostAddress}}/api/employee/cars
+Content-Type: application/json
+
+{
+  "Producer": "Ford",
+  "Model": "Mustang",
+  "YearOfProduction": 2021,
+  "NumberOfSeats": 4,
+  "Type": 3,
+  "IsAvailable": false,
+  "Location": "Chicago"
+}
+
+### Get All Cars
+
+GET {{car_database_api_deployed}}/api/user/cars
 Accept: application/json
