@@ -21,7 +21,7 @@ if (builder.Environment.IsDevelopment())
 }
 else if (builder.Environment.IsProduction())
 {
-    builder.Configuration.AddUserSecrets<Program>();
+    builder.Configuration.AddEnvironmentVariables();
 }
 
 // Register the DbContext with the connection string from user secrets
