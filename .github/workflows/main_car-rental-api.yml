@@ -25,7 +25,7 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: Set user secrets
-        run: dotnet user-secrets set "ConnectionStrings:DeploymentConnection" "${{ secrets.AZURE_SQL_CONNECTION_STRING }}" --project car-database-api.csproj
+        run: dotnet user-secrets set "ConnectionStrings:DeploymentConnection" "${{ secrets.AZURE_SQL_CONNECTION_STRING }}" --project car-database-api/car-database-api/car-database-api.csproj
 
       - name: dotnet publish
         run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
