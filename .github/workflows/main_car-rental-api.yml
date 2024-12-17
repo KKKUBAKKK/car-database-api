@@ -63,7 +63,5 @@ jobs:
           slot-name: 'Production'
           package: .
 
-      - name: Configure Connection String in Azure Web App
-        run: |
-          az webapp config appsettings set \
-            --settings "ConnectionStrings__DeploymentConnection=${{ secrets.AZURE_SQL_CONNECTION_STRING }}"
+      - name: Set user secrets
+        run: az webapp config appsettings set --settings "ConnectionStrings__DeploymentConnection=${{ secrets.AZURE_SQL_CONNECTION_STRING }}"
