@@ -43,7 +43,7 @@ builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(Program));
 
 // Configure JWT Authentication
-var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"] ?? throw new InvalidOperationException());
+var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt__Secret"] ?? throw new InvalidOperationException());
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

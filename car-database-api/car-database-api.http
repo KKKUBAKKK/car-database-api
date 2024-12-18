@@ -1,11 +1,11 @@
 @car_database_api_local = http://localhost:5001
 @car_database_api_deployed = http://car-rental-api-chezbchwebfggwcd.canadacentral-01.azurewebsites.net
-@jwt_token_customerapi = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InNhIiwicm9sZSI6IkN1c3RvbWVyIiwibmJmIjoxNzM0NTQxOTk2LCJleHAiOjE3MzUxNDY3OTYsImlhdCI6MTczNDU0MTk5Nn0.YW_h2f9khpmBpZRmh8wrz_lST39jTZz41jK5jg8AngE
-@jwt_token_employee = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InN1cGVyQm9zcyIsInJvbGUiOiJFbXBsb3llZSIsIm5iZiI6MTczNDU0MjAyOCwiZXhwIjoxNzM1MTQ2ODI4LCJpYXQiOjE3MzQ1NDIwMjh9.ySMtnXO9StJI_IrtM0R8UNZTlxbs5uFQhX-BDLdkTYU
+@jwt_token_customerapi = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InNhIiwicm9sZSI6IkN1c3RvbWVyIiwibmJmIjoxNzM0NTQ4ODcxLCJleHAiOjE3MzUxNTM2NzEsImlhdCI6MTczNDU0ODg3MX0.dIZoqPj7cIFjWf6a7UzlciXSy3a6oj3-zhjQsLcZo7o
+@jwt_token_employee = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InN1cGVyQm9zcyIsInJvbGUiOiJFbXBsb3llZSIsIm5iZiI6MTczNDU0ODkyNiwiZXhwIjoxNzM1MTUzNzI2LCJpYXQiOjE3MzQ1NDg5MjZ9.fXpm5vY479CqYrswnqZcLceoEmgKFP-D2LcRetchl24
 
 ### Deployed API
 ### 0. Authenticate and get JWT token customerApi
-POST {{car_database_api_local}}/api/auth/login
+POST {{car_database_api_deployed}}/api/auth/login
 Content-Type: application/json
 
 {
@@ -14,7 +14,7 @@ Content-Type: application/json
 }
 
 ### 0. Authenticate and get JWT token employeeApi
-POST {{car_database_api_local}}/api/auth/login
+POST {{car_database_api_deployed}}/api/auth/login
 Content-Type: application/json
 
 {
@@ -23,17 +23,17 @@ Content-Type: application/json
 }
 
 ### 1. Get Available Cars
-GET {{car_database_api_local}}/api/customer/cars
+GET {{car_database_api_deployed}}/api/customer/cars
 Accept: application/json
 #Authorization: Bearer {{jwt_token_customerapi}}
 
 ### 2. Get Specific Car Details
-GET {{car_database_api_local}}/api/customer/cars/13020
+GET {{car_database_api_deployed}}/api/customer/cars/13020
 Accept: application/json
 #Authorization: Bearer {{jwt_token_customerapi}}
 
 ### 3. Request Rental Offer
-POST {{car_database_api_local}}/api/customer/rentals/offers
+POST {{car_database_api_deployed}}/api/customer/rentals/offers
 Content-Type: application/json
 Authorization: Bearer {{jwt_token_customerapi}}
 
@@ -63,7 +63,7 @@ Authorization: Bearer {{jwt_token_customerapi}}
 }
 
 ### 5. Get My Rentals
-GET {{car_database_api_local}}/api/customer/rentals/my
+GET {{car_database_api_deployed}}/api/customer/rentals/my
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{jwt_token_customerapi}}
@@ -83,12 +83,12 @@ Authorization: Bearer {{jwt_token_customerapi}}
 }
 
 ### 7.1 get pending returns
-GET {{car_database_api_local}}/api/employee/rentals/pending-returns
+GET {{car_database_api_deployed}}/api/employee/rentals/pending-returns
 Content-Type: application/json
 Authorization: Bearer {{jwt_token_employee}}
 
 ### 7. Accept return
-POST {{car_database_api_local}}/api/employee/rentals/complete-return
+POST {{car_database_api_deployed}}/api/employee/rentals/complete-return
 Content-Type: application/json
 Authorization: Bearer {{jwt_token_employee}}
 
