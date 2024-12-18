@@ -8,6 +8,12 @@ public class Employee
 {
     [Key]
     public int id { get; set; }                    // Unique identifier for each employee
+    
+    [Required, StringLength(10)]
+    public string username { get; set; }                   // Employee's username (unique)
+    
+    [Required, StringLength(20)]
+    public string password { get; set; }                   // Employee's password
 
     [Required, StringLength(50)]
     public string firstName { get; set; }                   // Employee's first name

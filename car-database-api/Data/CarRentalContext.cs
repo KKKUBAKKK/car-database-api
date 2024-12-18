@@ -12,6 +12,7 @@ public class CarRentalDbContext : DbContext
     // Define DbSet properties for each of the tables
     public DbSet<Car> Cars { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<CustomerApi> CustomerApis { get; set; }
     public DbSet<Employee> Employees { get; set; }
     public DbSet<Rental> Rentals { get; set; }
     // public DbSet<ReturnRecord> ReturnRecords { get; set; }

@@ -25,8 +25,6 @@ else if (builder.Environment.IsProduction())
 }
 
 // Register the DbContext with the connection string from user secrets
-// var connectionString = builder.Configuration.GetConnectionString(
-//     builder.Environment.IsProduction() ? "DeploymentConnection" : "DevelopmentConnection") + ";TrustServerCertificate=True";
 var connectionString = builder.Configuration.GetConnectionString("DeploymentConnection") + ";TrustServerCertificate=True";
 
 builder.Services.AddDbContext<CarRentalDbContext>(options =>
@@ -44,20 +42,20 @@ builder.Services.AddControllers();
 // Configure AutoMapper
 builder.Services.AddAutoMapper(typeof(Program));
 
-// // Configure JWT Authentication
-// var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"] ?? throw new InvalidOperationException());
-// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//     .AddJwtBearer(options =>
-//     {
-//         options.TokenValidationParameters = new TokenValidationParameters
-//         {
-//             ValidateIssuerSigningKey = true,
-//             IssuerSigningKey = new SymmetricSecurityKey(key),
-//             ValidateIssuer = false,
-//             ValidateAudience = false,
-//             ClockSkew = TimeSpan.Zero
-//         };
-//     });
+// Configure JWT Authentication
+var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"] ?? throw new InvalidOperationException());
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
 
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
@@ -66,29 +64,29 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Car Rental API", Version = "v1" });
     
     // Add JWT Authentication to Swagger
-    // c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    // {
-    //     Description = "JWT Authorization header using the Bearer scheme",
-    //     Name = "Authorization",
-    //     In = ParameterLocation.Header,
-    //     Type = SecuritySchemeType.ApiKey,
-    //     Scheme = "Bearer"
-    // });
-    //
-    // c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    // {
-    //     {
-    //         new OpenApiSecurityScheme
-    //         {
-    //             Reference = new OpenApiReference
-    //             {
-    //                 Type = ReferenceType.SecurityScheme,
-    //                 Id = "Bearer"
-    //             }
-    //         },
-    //         new string[] {}
-    //     }
-    // });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+    
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
 });
     
 // Build the service provider
@@ -102,8 +100,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-// app.UseAuthentication();
-// app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

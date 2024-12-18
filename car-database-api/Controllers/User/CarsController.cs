@@ -11,11 +11,11 @@ namespace car_database_api.Controllers.User;
 
 [ApiController]
 [Route("api/user/cars")]
-// [Authorize(Roles = Roles.Customer)]
+[Authorize(Roles = Roles.Customer)]
 public class CarsController(CarRentalDbContext context, IMapper mapper) : ControllerBase
 {
     [HttpGet]
-    [AllowAnonymous] // Allow unregistered users to browse cars
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<CarDto>>> GetAvailableCars()
     {
         var cars = await context.Cars

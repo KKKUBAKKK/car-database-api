@@ -13,7 +13,7 @@ namespace car_database_api.Controllers.User;
 
 [ApiController]
 [Route("api/user/rentals")]
-// [Authorize(Roles = Roles.Customer)]
+[Authorize(Roles = Roles.Customer)]
 public class RentalsController(CarRentalDbContext context, IMapper mapper) : ControllerBase
 {
     [HttpGet("my")]
