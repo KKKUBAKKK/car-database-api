@@ -10,7 +10,7 @@ public class CarRentalCalculator
     public const double DefaultInsuranceRate = 15.0; // Base daily insurance rate in dollars
     
     
-    public static decimal CalculateDailyCarRate(Car car, User user)
+    public static decimal CalculateDailyCarRate(Car car, Customer customer)
     {
         // Later we could add calculating based on previous rentals (for example add score field for every customer)
         double carTypeMultiplier = car.type switch
@@ -35,7 +35,7 @@ public class CarRentalCalculator
         //     FuelType.Hydrogen => 2.0,
         //     _ => 1.0
         // };
-        double driverAgeMultiplier = DateTime.Now.Year - user.birthday.Year switch
+        double driverAgeMultiplier = DateTime.Now.Year - customer.birthday.Year switch
         {
             <= 21 => 1.5, // Young drivers pay more
             <= 25 => 1.2,
@@ -46,7 +46,7 @@ public class CarRentalCalculator
         return (decimal) (DefaultBaseRate * carTypeMultiplier * ageMultiplier * driverAgeMultiplier);
     }
 
-    public static decimal CalculateDailyInsuranceRate(Car car, User user)
+    public static decimal CalculateDailyInsuranceRate(Car car, Customer customer)
     {
         
         // Later we could add calculating based on previous rentals (for example add score field for every customer)
@@ -72,7 +72,7 @@ public class CarRentalCalculator
         //     FuelType.Hydrogen => 2.0,
         //     _ => 1.0
         // };
-        double driverAgeMultiplier = DateTime.Now.Year - user.birthday.Year switch
+        double driverAgeMultiplier = DateTime.Now.Year - customer.birthday.Year switch
         {
             <= 21 => 1.5, // Young drivers pay more
             <= 25 => 1.2,

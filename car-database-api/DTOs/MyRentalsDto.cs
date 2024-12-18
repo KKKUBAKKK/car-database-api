@@ -4,6 +4,6 @@ namespace car_database_api.DTOs;
 
 public class MyRentalsDto
 {
-    public int UserId { get; set; }
+    public int CustomerId { get; set; }
     public string RentalName { get; set; } = Constants.RentalName;
 }

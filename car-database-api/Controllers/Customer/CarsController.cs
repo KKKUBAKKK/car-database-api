@@ -2,15 +2,14 @@ using AutoMapper;
 using car_database_api.Auth;
 using car_database_api.Data;
 using car_database_api.DTOs;
-using car_database_api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace car_database_api.Controllers.User;
+namespace car_database_api.Controllers.Customer;
 
 [ApiController]
-[Route("api/user/cars")]
+[Route("api/customer/cars")]
 [Authorize(Roles = Roles.Customer)]
 public class CarsController(CarRentalDbContext context, IMapper mapper) : ControllerBase
 {

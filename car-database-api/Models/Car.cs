@@ -6,6 +6,7 @@ namespace car_database_api.Models;
 public class Car
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int id { get; set; }                      // Unique identifier for each car
 
     [Required, StringLength(50)]
@@ -42,5 +43,5 @@ public class Car
     [StringLength(100)] public string location { get; set; } = "Plac Politechniki, Warszawa";                // Location of the car (e.g., city, parking lot)
     
     // Navigation properties
-    public ICollection<Rental> Rentals { get; set; } = new List<Rental>();
+    // public ICollection<Rental> Rentals { get; set; } = new List<Rental>();
 }

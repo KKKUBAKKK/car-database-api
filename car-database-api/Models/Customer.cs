@@ -6,9 +6,10 @@ using car_database_api.Helpers;
 
 namespace car_database_api.Models;
 
-public class User
+public class Customer
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int id { get; set; }                                       // Unique identifier for each customer
     
     [Required]
@@ -31,5 +32,5 @@ public class User
     // [Required, StringLength(50)]
     // public string DriverLicenseNumber { get; set; }                           // Unique driver's license number
     
-    public ICollection<Rental> Rentals { get; set; } = new List<Rental>();    // Navigation properties
+    // public ICollection<Rental> Rentals { get; set; } = new List<Rental>();    // Navigation properties
 }

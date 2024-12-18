@@ -8,8 +8,8 @@
 // namespace car_database_api.Controllers
 // {
 //     [ApiController]
-//     [Route("api/user/[controller]")]
-//     [Authorize(Roles = Roles.User)]
+//     [Route("api/customer/[controller]")]
+//     [Authorize(Roles = Roles.Customer)]
 //     public class CarController : ControllerBase
 //     {
 //         private readonly CarRentalDbContext _context;

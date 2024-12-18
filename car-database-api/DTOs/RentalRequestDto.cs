@@ -4,6 +4,8 @@ public class RentalRequestDto
 {
     public int OfferId { get; set; } // Moje id
     public int CustomerId { get; set; } // External id
+    
+    public string RentalName { get; set; }
     public DateTime PlannedStartDate { get; set; }
     public DateTime PlannedEndDate { get; set; }
 }

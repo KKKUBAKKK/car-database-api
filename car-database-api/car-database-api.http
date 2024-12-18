@@ -1,61 +1,108 @@
 @car_database_api_local = http://localhost:5001
 @car_database_api_deployed = http://car-rental-api-chezbchwebfggwcd.canadacentral-01.azurewebsites.net
-@jwt_token = 
+@jwt_token_customerapi = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InNhIiwicm9sZSI6IkN1c3RvbWVyIiwibmJmIjoxNzM0NTQxOTk2LCJleHAiOjE3MzUxNDY3OTYsImlhdCI6MTczNDU0MTk5Nn0.YW_h2f9khpmBpZRmh8wrz_lST39jTZz41jK5jg8AngE
+@jwt_token_employee = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InN1cGVyQm9zcyIsInJvbGUiOiJFbXBsb3llZSIsIm5iZiI6MTczNDU0MjAyOCwiZXhwIjoxNzM1MTQ2ODI4LCJpYXQiOjE3MzQ1NDIwMjh9.ySMtnXO9StJI_IrtM0R8UNZTlxbs5uFQhX-BDLdkTYU
 
 ### Deployed API
-### 0. Authenticate and get JWT token
+### 0. Authenticate and get JWT token customerApi
 POST {{car_database_api_local}}/api/auth/login
 Content-Type: application/json
 
 {
-  "username": "",
-  "password": ""
+  "username": "sa",
+  "password": "9aperugh"
+}
+
+### 0. Authenticate and get JWT token employeeApi
+POST {{car_database_api_local}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "superBoss",
+  "password": "adjfhf08ahf9asdjh"
 }
 
 ### 1. Get Available Cars
-GET {{car_database_api_deployed}}/api/user/cars
+GET {{car_database_api_local}}/api/customer/cars
 Accept: application/json
+#Authorization: Bearer {{jwt_token_customerapi}}
 
 ### 2. Get Specific Car Details
-GET {{car_database_api_local}}/api/user/cars/13020
+GET {{car_database_api_local}}/api/customer/cars/13020
 Accept: application/json
-Authorization: Bearer {{jwt_token}}
+#Authorization: Bearer {{jwt_token_customerapi}}
 
 ### 3. Request Rental Offer
-POST {{car_database_api_deployed}}/api/user/rentals/offers
+POST {{car_database_api_local}}/api/customer/rentals/offers
 Content-Type: application/json
+Authorization: Bearer {{jwt_token_customerapi}}
 
 {
-  "carId": 13020,
-  "customerId": 1,
-  "startDate": "2024-03-15",
-  "endDate": "2024-03-20"
+  "CarId": 13020,
+  "CustomerId": 1,
+  "firstName": "John",
+  "lastName": "Doe",
+  "birthday": "1990-01-01",
+  "driverLicenseReceiveDate": "2010-01-01",
+  "RentalName": "JEJ Car Rental",
+  "PlannedStartDate": "2024-03-15",
+  "PlannedEndDate": "2024-03-20"
 }
 
 ### 4. Create Rental
-POST {{car_database_api_deployed}}/api/user/rentals
+POST {{car_database_api_local}}/api/customer/rentals
 Content-Type: application/json
+Authorization: Bearer {{jwt_token_customerapi}}
 
 {
-  "offerId": 1,
+  "offerId": 2,
   "customerId": 1,
+  "RentalName": "JEJ Car Rental",
   "plannedStartDate": "2024-03-15",
   "plannedEndDate": "2024-03-20"
 }
 
 ### 5. Get My Rentals
-GET {{car_database_api_deployed}}/api/user/rentals/my
+GET {{car_database_api_local}}/api/customer/rentals/my
 Accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{jwt_token_customerapi}}
 
 {
-  "UserId": 1,
-  "RentalName": "DefaultRentalName"
+  "CustomerId": 1,
+  "RentalName": "JEJ Car Rental"
+}
+
+### 6. Return Car
+POST {{car_database_api_local}}/api/customer/rentals/return
+Content-Type: application/json
+Authorization: Bearer {{jwt_token_customerapi}}
+
+{
+  "RentalId": 2
+}
+
+### 7.1 get pending returns
+GET {{car_database_api_local}}/api/employee/rentals/pending-returns
+Content-Type: application/json
+Authorization: Bearer {{jwt_token_employee}}
+
+### 7. Accept return
+POST {{car_database_api_local}}/api/employee/rentals/complete-return
+Content-Type: application/json
+Authorization: Bearer {{jwt_token_employee}}
+
+{
+  "RentalId": 1,
+  "Condition": "Good",
+  "EmployeeNotes": "Everything is fine",
+  "ReturnDate": "2024-03-20"
 }
 
 ### 6. Add Car 1
-POST {{car_database_api_deployed}}/api/employee/cars
+POST {{car_database_api_local}}/api/employee/cars
 Content-Type: application/json
+Authorization: Bearer {{jwt_token_employee}}
 
 {
   "Producer": "Toyota",
@@ -68,8 +115,9 @@ Content-Type: application/json
 }
 
 ### 7. Add Car 2
-POST {{car_database_api_deployed}}/api/employee/cars
+POST {{car_database_api_local}}/api/employee/cars
 Content-Type: application/json
+Authorization: Bearer {{jwt_token_employee}}
 
 {
   "Producer": "Honda",
@@ -82,8 +130,9 @@ Content-Type: application/json
 }
 
 ### 8. Add Car 3
-POST {{car_database_api_deployed}}/api/employee/cars
+POST {{car_database_api_local}}/api/employee/cars
 Content-Type: application/json
+Authorization: Bearer {{jwt_token_employee}}
 
 {
   "Producer": "Ford",
@@ -91,6 +140,6 @@ Content-Type: application/json
   "YearOfProduction": 2021,
   "NumberOfSeats": 4,
   "Type": 3,
-  "IsAvailable": false,
+  "IsAvailable": true,
   "Location": "Chicago"
 }

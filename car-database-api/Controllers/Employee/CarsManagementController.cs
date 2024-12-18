@@ -11,7 +11,7 @@ namespace car_database_api.Controllers.Employee;
 
 [ApiController]
 [Route("api/employee/cars")]
-// [Authorize(Roles = Roles.Employee)]
+[Authorize(Roles = Roles.Employee)]
 public class CarsManagementController : ControllerBase
 {
     private readonly CarRentalDbContext _context;
@@ -27,7 +27,7 @@ public class CarsManagementController : ControllerBase
     public async Task<ActionResult<IEnumerable<CarDto>>> GetAllCars()
     {
         var cars = await _context.Cars
-            .Include(c => c.Rentals)
+            // .Include(c => c.Rentals)
             .ToListAsync();
         
         return Ok(_mapper.Map<IEnumerable<CarDto>>(cars));
@@ -68,6 +68,11 @@ public class CarsManagementController : ControllerBase
             return NotFound();
         }
 
+        if (car.isAvailable == false)
+        {
+            return BadRequest("Car is currently rented out");
+        }
+        
         _context.Cars.Remove(car);
         await _context.SaveChangesAsync();
         
@@ -78,7 +83,7 @@ public class CarsManagementController : ControllerBase
     public async Task<ActionResult<CarDto>> GetCar(int id)
     {
         var car = await _context.Cars
-            .Include(c => c.Rentals)
+            // .Include(c => c.Rentals)
             .FirstOrDefaultAsync(c => c.id == id);
 
         if (car == null)

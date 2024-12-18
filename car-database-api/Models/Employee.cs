@@ -7,6 +7,7 @@ namespace car_database_api.Models;
 public class Employee
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int id { get; set; }                    // Unique identifier for each employee
     
     [Required, StringLength(10)]

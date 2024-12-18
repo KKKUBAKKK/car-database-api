@@ -7,6 +7,7 @@ namespace car_database_api.Models;
 public class RentalOffer
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int id { get; set; }
     public int carId { get; set; }
     public int userId { get; set; }
@@ -21,5 +22,5 @@ public class RentalOffer
     
     // Navigation property
     public Car Car { get; set; }
-    public User User { get; set; }
+    public Customer Customer { get; set; }
 }

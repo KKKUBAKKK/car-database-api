@@ -14,7 +14,7 @@ builder.Configuration
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddEnvironmentVariables();
 
-// Load user secrets based on the environment
+// Load customer secrets based on the environment
 if (builder.Environment.IsDevelopment())
 {
     builder.Configuration.AddUserSecrets<Program>();
@@ -24,7 +24,7 @@ else if (builder.Environment.IsProduction())
     builder.Configuration.AddEnvironmentVariables();
 }
 
-// Register the DbContext with the connection string from user secrets
+// Register the DbContext with the connection string from customer secrets
 var connectionString = builder.Configuration.GetConnectionString("DeploymentConnection") + ";TrustServerCertificate=True";
 
 builder.Services.AddDbContext<CarRentalDbContext>(options =>

@@ -11,7 +11,7 @@ namespace car_database_api.Controllers.Employee;
 
 [ApiController]
 [Route("api/employee/rentals")]
-// [Authorize(Roles = Roles.Employee)]
+[Authorize(Roles = Roles.Employee)]
 public class RentalsManagementController : ControllerBase
 {
     private readonly CarRentalDbContext _context;
@@ -28,7 +28,7 @@ public class RentalsManagementController : ControllerBase
     {
         var query = _context.Rentals
             .Include(r => r.Car)
-            .Include(r => r.User)
+            .Include(r => r.Customer)
             .AsQueryable();
 
         if (filter.Status.HasValue)
@@ -45,47 +45,56 @@ public class RentalsManagementController : ControllerBase
     {
         var rentals = await _context.Rentals
             .Include(r => r.Car)
-            .Include(r => r.User)
+            .Include(r => r.Customer)
             .Where(r => r.status == RentalStatus.pendingReturn)
             .ToListAsync();
 
         return Ok(_mapper.Map<IEnumerable<RentalDto>>(rentals));
     }
 
-    // [HttpPost("{id}/complete-return")]
-    // public async Task<ActionResult<ReturnRecordDto>> CompleteReturn(int id, [FromForm] ReturnRequestDto request)
-    // {
-    //     var rental = await _context.Rentals
-    //         .Include(r => r.Car)
-    //         .FirstOrDefaultAsync(r => r.id == id && r.status == RentalStatus.pendingReturn);
-    //
-    //     if (rental == null)
-    //     {
-    //         return NotFound("Rental not found or not in pending return status");
-    //     }
-    //
-    //     // Handle photo upload
-    //     string photoUrl = await UploadPhotoToBlob(request.Photo);
-    //
-    //     var returnRecord = new ReturnRecord
-    //     {
-    //         RentalId = rental.id,
-    //         Condition = request.Condition,
-    //         PhotoUrl = photoUrl,
-    //         EmployeeNotes = request.EmployeeNotes,
-    //         ReturnDate = DateTime.UtcNow
-    //     };
-    //
-    //     rental.status = RentalStatus.ended;
-    //     rental.endDate = DateTime.UtcNow;
-    //     rental.Car.isAvailable = true;
-    //
-    //     _context.ReturnRecords.Add(returnRecord);
-    //     await _context.SaveChangesAsync();
-    //
-    //     return Ok(_mapper.Map<ReturnRecordDto>(returnRecord));
-    // }
-    //
+    [HttpPost("complete-return")]
+    public async Task<ActionResult<ReturnRecordDto>> CompleteReturn([FromForm] ReturnRecordDto request)
+    {
+        var rental = await _context.Rentals
+            .Include(r => r.Car)
+            .FirstOrDefaultAsync(r => r.id == request.RentalId && r.status == RentalStatus.pendingReturn);
+    
+        if (rental == null)
+        {
+            return NotFound("Rental not found or not in pending return status");
+        }
+    
+        // Handle photo upload
+        // string photoUrl = await UploadPhotoToBlob(request.Photo);
+    
+        var returnRecord = new ReturnRecord
+        {
+            RentalId = rental.id,
+            EmployeeID = 1,
+            Condition = request.Condition,
+            // PhotoUrl = photoUrl,
+            EmployeeNotes = request.EmployeeNotes,
+            ReturnDate = DateTime.UtcNow
+        };
+    
+        rental.status = RentalStatus.ended;
+        rental.endDate = DateTime.UtcNow;
+        rental.Car.isAvailable = true;
+    
+        _context.ReturnRecords.Add(returnRecord);
+        
+        var car = await _context.Cars.FindAsync(rental.carId);
+        if (car == null)
+        {
+            return NotFound("Car not found");
+        }
+        car.isAvailable = true;
+        
+        await _context.SaveChangesAsync();
+    
+        return Ok(_mapper.Map<ReturnRecordDto>(returnRecord));
+    }
+    
     // private async Task<string> UploadPhotoToBlob(IFormFile photo)
     // {
     //     // Implement photo upload to Azure Blob Storage

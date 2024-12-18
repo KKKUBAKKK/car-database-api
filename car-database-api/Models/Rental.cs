@@ -7,6 +7,7 @@ namespace car_database_api.Models;
 public class Rental
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }                    // Unique identifier for each rental
 
         [ForeignKey("Car")]
@@ -36,10 +37,10 @@ public class Rental
 
         // public int? MileageAtEnd { get; set; }               // Mileage of the car at the end of the rental (nullable if rental is in progress)
         
-        // public ReturnRecord? ReturnRecord { get; set; }     // Return record associated with the rental (nullable)
+        public ReturnRecord? ReturnRecord { get; set; }     // Return record associated with the rental (nullable)
 
         // Navigation properties
         public Car Car { get; set; }
-        public User User { get; set; }
-        public Employee Employee { get; set; }
+        public Customer Customer { get; set; }
+        // public Employee Employee { get; set; }
     }
