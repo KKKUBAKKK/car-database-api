@@ -66,4 +66,4 @@ jobs:
       - name: Set user secrets
         run: |
           az webapp config appsettings set --resource-group car-database-api_group --name car-rental-api --settings "ConnectionStrings__DeploymentConnection=${{ secrets.AZURE_SQL_CONNECTION_STRING }}"
-          az webapp config appsettings set --resource-group car-database-api_group --name car-rental-api --settings "Jwt__Secret=${{ secrets.JWTTOKEN }}"
+          az webapp config appserrings set --resource-group car-database-api_group --name car-rental-api --settings "JwtSecret=${{ secrets.JWTTOKEN }}"
