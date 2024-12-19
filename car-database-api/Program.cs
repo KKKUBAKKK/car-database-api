@@ -15,13 +15,16 @@ builder.Configuration
     .AddEnvironmentVariables();
 
 // Load customer secrets based on the environment
+byte[] key = null;
 if (builder.Environment.IsDevelopment())
 {
     builder.Configuration.AddUserSecrets<Program>();
+    key = Encoding.ASCII.GetBytes(builder.Configuration["JwtSecret"] ?? throw new ArgumentNullException());
 }
 else if (builder.Environment.IsProduction())
 {
     builder.Configuration.AddEnvironmentVariables();
+    key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JwtSecret") ?? throw new ArgumentNullException());
 }
 
 // Register the DbContext with the connection string from customer secrets
@@ -43,7 +46,16 @@ builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(Program));
 
 // Configure JWT Authentication
-var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt__Secret"] ?? throw new InvalidOperationException());
+var logger = LoggerFactory.Create(b => b.AddConsole()).CreateLogger<Program>();
+
+// var jwtSecret = builder.Configuration["Jwt__Secret"];
+// if (string.IsNullOrEmpty(jwtSecret))
+// {
+//     logger.LogError("JWT secret is not configured.");
+//     throw new InvalidOperationException("JWT secret is not configured.");
+// }
+// var key = Encoding.ASCII.GetBytes(jwtSecret);
+// var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt__Secret"] ?? throw new ArgumentNullException());
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
