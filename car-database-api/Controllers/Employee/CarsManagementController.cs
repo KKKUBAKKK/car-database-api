@@ -11,7 +11,7 @@ namespace car_database_api.Controllers.Employee;
 
 [ApiController]
 [Route("api/employee/cars")]
-[Authorize(Roles = Roles.Employee)]
+// [Authorize(Roles = Roles.Employee)]
 public class CarsManagementController : ControllerBase
 {
     private readonly CarRentalDbContext _context;
@@ -92,5 +92,39 @@ public class CarsManagementController : ControllerBase
         }
 
         return Ok(_mapper.Map<CarDto>(car));
+    }
+    
+    // Get x cars with id > lastId
+    [HttpGet("next/{lastId:int}")]
+    public async Task<ActionResult<IEnumerable<CarDto>>> GetNextCars(int lastId)
+    {
+        var cars = await _context.Cars
+            .Where(c => c.id > lastId)
+            .OrderBy(c => c.id)
+            .Take(10)
+            .ToListAsync();
+            
+        return Ok(_mapper.Map<IEnumerable<CarDto>>(cars));
+    }
+    
+    // Get x cars with id < firstId
+    [HttpGet("previous/{firstId:int}")]
+    public async Task<ActionResult<IEnumerable<CarDto>>> GetPrevCars(int firstId)
+    {
+        var cars = await _context.Cars
+            .Where(c => c.id < firstId)
+            .OrderByDescending(c => c.id)
+            .Take(10)
+            .ToListAsync();
+            
+        return Ok(_mapper.Map<IEnumerable<CarDto>>(cars));
+    }
+    
+    // Get total number of cars
+    [HttpGet("count")]
+    public async Task<ActionResult<int>> GetCarsCount()
+    {
+        var count = await _context.Cars.CountAsync();
+        return Ok(count);
     }
 }
