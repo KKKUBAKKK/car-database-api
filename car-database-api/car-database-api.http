@@ -1,11 +1,11 @@
 @car_database_api_local = http://localhost:5001
 @car_database_api_deployed = http://car-rental-api-chezbchwebfggwcd.canadacentral-01.azurewebsites.net
-@jwt_token_customerapi = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InNhIiwicm9sZSI6IkN1c3RvbWVyIiwibmJmIjoxNzM0NjQzMjIzLCJleHAiOjE3MzUyNDgwMjMsImlhdCI6MTczNDY0MzIyM30.mqYPs2FS7Y8TcbuDUNT2E2ncGHXHGmEchjxWZeVeUMU
+@jwt_token_customerapi = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InNhIiwicm9sZSI6IkN1c3RvbWVyIiwibmJmIjoxNzM2NDQ1NDQ5LCJleHAiOjE3MzcwNTAyNDksImlhdCI6MTczNjQ0NTQ0OX0.3mNdyvqk40v4L1g4i5tROwrRjba-TWfFr80mA6ez3cc
 @jwt_token_employee = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InN1cGVyQm9zcyIsInJvbGUiOiJFbXBsb3llZSIsIm5iZiI6MTczNDU0ODkyNiwiZXhwIjoxNzM1MTUzNzI2LCJpYXQiOjE3MzQ1NDg5MjZ9.fXpm5vY479CqYrswnqZcLceoEmgKFP-D2LcRetchl24
 
 ### Deployed API
 ### 0. Authenticate and get JWT token customerApi
-POST {{car_database_api_deployed}}/api/auth/login
+POST {{car_database_api_local}}/api/auth/login
 Content-Type: application/json
 
 {
@@ -14,7 +14,7 @@ Content-Type: application/json
 }
 
 ### 0. Authenticate and get JWT token employeeApi
-POST {{car_database_api_deployed}}/api/auth/login
+POST {{car_database_api_local}}/api/auth/login
 Content-Type: application/json
 
 {
@@ -55,7 +55,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token_customerapi}}
 
 {
-  "offerId": 2,
+  "offerId": 7,
   "customerId": 1,
   "RentalName": "JEJ Car Rental",
   "plannedStartDate": "2024-03-15",
@@ -63,7 +63,7 @@ Authorization: Bearer {{jwt_token_customerapi}}
 }
 
 ### 5. Get My Rentals
-GET {{car_database_api_deployed}}/api/customer/rentals/my
+GET {{car_database_api_local}}/api/customer/rentals/my
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{jwt_token_customerapi}}
