@@ -40,7 +40,10 @@ public class AuthController : ControllerBase
         if (employee != null)
         {
             var token = GenerateJwtToken(employee.username, Roles.Employee);
-            return Ok(new { token });
+            var res = new AcceptLoginDto();
+            res.token = token;
+            res.employeeId = employee.id;
+            return Ok(res);
         }
 
         return Unauthorized();
@@ -49,7 +52,7 @@ public class AuthController : ControllerBase
     private string GenerateJwtToken(string username, string role)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Secret"] ?? string.Empty);
+        var key = Encoding.ASCII.GetBytes(_configuration["JwtSecret"] ?? string.Empty);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[]

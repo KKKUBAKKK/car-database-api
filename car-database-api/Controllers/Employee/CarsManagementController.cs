@@ -11,7 +11,7 @@ namespace car_database_api.Controllers.Employee;
 
 [ApiController]
 [Route("api/employee/cars")]
-// [Authorize(Roles = Roles.Employee)]
+[Authorize(Roles = Roles.Employee)]
 public class CarsManagementController : ControllerBase
 {
     private readonly CarRentalDbContext _context;
