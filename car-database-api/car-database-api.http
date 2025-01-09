@@ -23,12 +23,12 @@ Content-Type: application/json
 }
 
 ### 1. Get Available Cars
-GET {{car_database_api_deployed}}/api/customer/cars
+GET {{car_database_api_local}}/api/customer/cars
 Accept: application/json
 #Authorization: Bearer {{jwt_token_customerapi}}
 
 ### 2. Get Specific Car Details
-GET {{car_database_api_deployed}}/api/customer/cars/13020
+GET {{car_database_api_local}}/api/customer/cars/13020
 Accept: application/json
 #Authorization: Bearer {{jwt_token_customerapi}}
 
@@ -38,7 +38,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token_customerapi}}
 
 {
-  "CarId": 13020,
+  "CarId": 13020, 
   "CustomerId": 1,
   "firstName": "John",
   "lastName": "Doe",

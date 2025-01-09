@@ -40,7 +40,10 @@ public class AuthController : ControllerBase
         if (employee != null)
         {
             var token = GenerateJwtToken(employee.username, Roles.Employee);
-            return Ok(new { token });
+            var res = new AcceptLoginDto();
+            res.token = token;
+            res.employeeId = employee.id;
+            return Ok(res);
         }
 
         return Unauthorized();
