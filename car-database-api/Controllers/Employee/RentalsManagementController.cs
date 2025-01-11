@@ -72,7 +72,10 @@ public class RentalsManagementController : ControllerBase
             RentalId = rental.id,
             EmployeeID = 1,
             Condition = request.Condition,
-            // PhotoUrl = photoUrl,
+            FrontPhotoUrl = request.FrontPhotoUrl,
+            BackPhotoUrl = request.BackPhotoUrl,
+            RightPhotoUrl = request.RightPhotoUrl,
+            LeftPhotoUrl = request.LeftPhotoUrl,
             EmployeeNotes = request.EmployeeNotes,
             ReturnDate = DateTime.UtcNow
         };

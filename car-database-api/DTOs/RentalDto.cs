@@ -1,3 +1,5 @@
+using car_database_api.Models;
+
 namespace car_database_api.DTOs;
 
 public class RentalDto
@@ -8,7 +10,7 @@ public class RentalDto
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public decimal TotalPrice { get; set; }
-    public string Status { get; set; }
+    public RentalStatus Status { get; set; }
     public String StartLocation { get; set; }
     public String EndLocation { get; set; }
 }
