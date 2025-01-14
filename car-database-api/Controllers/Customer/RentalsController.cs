@@ -121,7 +121,20 @@ public class RentalsController(CarRentalDbContext context, IMapper mapper) : Con
         offer.isActive = false;
         await context.SaveChangesAsync();
 
-        return Ok(rental);
+        var rentalDto = new RentalDto
+        {
+            Id = rental.id,
+            CarId = rental.carId,
+            UserId = rental.userId,
+            StartDate = rental.startDate,
+            EndDate = rental.endDate,
+            TotalPrice = rental.totalPrice,
+            Status = rental.status.ToString(),
+            StartLocation = rental.startLocation,
+            EndLocation = rental.endLocation
+        };
+
+        return Ok(rentalDto);
     }
     
     [HttpPost("return")]
