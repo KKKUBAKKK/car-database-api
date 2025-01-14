@@ -103,6 +103,7 @@ public class RentalsController(CarRentalDbContext context, IMapper mapper) : Con
         {
             carId = offer.carId,
             userId = request.CustomerId,
+            rentalName = user.rentalName,
             startDate = request.PlannedStartDate,
             endDate = request.PlannedEndDate,
             totalPrice = (offer.dailyRate + offer.insuranceRate) * 

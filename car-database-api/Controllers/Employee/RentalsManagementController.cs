@@ -70,7 +70,7 @@ public class RentalsManagementController : ControllerBase
         var returnRecord = new ReturnRecord
         {
             RentalId = rental.id,
-            EmployeeID = 1,
+            EmployeeID = request.EmployeeID,
             Condition = request.Condition,
             FrontPhotoUrl = request.FrontPhotoUrl,
             BackPhotoUrl = request.BackPhotoUrl,
@@ -94,6 +94,8 @@ public class RentalsManagementController : ControllerBase
         car.isAvailable = true;
         
         await _context.SaveChangesAsync();
+        
+        // wyslij wiadomosc do backendu wyszukiwarki z potwierdzeniem zwrotu za pmoca baseUrl w CustomerApi
     
         return Ok(_mapper.Map<ReturnRecordDto>(returnRecord));
     }

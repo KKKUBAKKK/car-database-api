@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using car_database_api.Helpers;
 
 namespace car_database_api.Models;
 
@@ -14,7 +15,6 @@ public class CustomerApi
     
     [Required, StringLength(20)]
     public string password { get; set; }                   // CustomerApi's password
-    
-    // [Required, StringLength(50)]
-    // public string baseUrl { get; set; }
+
+    [Required, StringLength(50)] public string baseUrl { get; set; } = Constants.RentalBaseUrl;
 }

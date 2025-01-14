@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using car_database_api.Helpers;
 
 namespace car_database_api.Models;
 
@@ -15,6 +16,9 @@ public class Rental
 
         [ForeignKey("Customer")]
         public int userId { get; set; }                  // Foreign key reference to the Customers table
+
+        [ForeignKey("CustomerApi")] 
+        public string rentalName { get; set; } = Constants.RentalName;                  // Foreign key reference to the Customers table
 
         [Required]
         public DateTime startDate { get; set; }              // The start date and time of the rental
