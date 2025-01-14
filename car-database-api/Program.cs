@@ -28,6 +28,9 @@ else if (builder.Environment.IsProduction())
 }
 
 // Register the DbContext with the connection string from customer secrets
+// var connectionString = builder.Environment.IsDevelopment() ?
+//     builder.Configuration.GetConnectionString("DevelopmentConnection")  + ";TrustServerCertificate=True":
+//     builder.Configuration.GetConnectionString("DeploymentConnection") + ";TrustServerCertificate=True";
 var connectionString = builder.Configuration.GetConnectionString("DeploymentConnection") + ";TrustServerCertificate=True";
 
 builder.Services.AddDbContext<CarRentalDbContext>(options =>

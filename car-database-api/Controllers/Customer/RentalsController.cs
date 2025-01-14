@@ -88,7 +88,7 @@ public class RentalsController(CarRentalDbContext context, IMapper mapper) : Con
             .FirstOrDefaultAsync(u => u.externalId == request.CustomerId && u.rentalName == request.RentalName);
         if (user == null)
         {
-            return Forbid();
+            return NotFound("Customer not found");
         }
         
         var offer = await context.RentalOffers
@@ -96,7 +96,7 @@ public class RentalsController(CarRentalDbContext context, IMapper mapper) : Con
 
         if (offer == null)
         {
-            return BadRequest("Invalid or expired offer");
+            return NotFound("Offer not found or expired");
         }
 
         var rental = new Rental
