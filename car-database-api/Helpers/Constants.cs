@@ -3,5 +3,5 @@ namespace car_database_api.Helpers;
 public static class Constants
 {
     public const string RentalName = "JEJ Car Rental";
-    public const string RentalBaseUrl = "";
+    public const string RentalBaseUrl = "https://user-api-dotnet.azurewebsites.net";
 }
