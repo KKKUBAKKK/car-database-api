@@ -16,11 +16,13 @@ public class RentalsManagementController : ControllerBase
 {
     private readonly CarRentalDbContext _context;
     private readonly IMapper _mapper;
+    private readonly HttpClient _httpClient;
 
-    public RentalsManagementController(CarRentalDbContext context, IMapper mapper)
+    public RentalsManagementController(CarRentalDbContext context, IMapper mapper, HttpClient httpClient)
     {
         _context = context;
         _mapper = mapper;
+        _httpClient = httpClient;
     }
 
     [HttpGet]
@@ -64,21 +66,21 @@ public class RentalsManagementController : ControllerBase
             return NotFound("Rental not found or not in pending return status");
         }
     
-        // Handle photo upload
-        // string photoUrl = await UploadPhotoToBlob(request.Photo);
-    
         var returnRecord = new ReturnRecord
         {
             RentalId = rental.id,
-            EmployeeID = 1,
+            EmployeeID = request.EmployeeID,
             Condition = request.Condition,
-            // PhotoUrl = photoUrl,
+            FrontPhotoUrl = request.FrontPhotoUrl,
+            BackPhotoUrl = request.BackPhotoUrl,
+            RightPhotoUrl = request.RightPhotoUrl,
+            LeftPhotoUrl = request.LeftPhotoUrl,
             EmployeeNotes = request.EmployeeNotes,
-            ReturnDate = DateTime.UtcNow
+            ReturnDate = request.ReturnDate
         };
     
         rental.status = RentalStatus.ended;
-        rental.endDate = DateTime.UtcNow;
+        rental.endDate = request.ReturnDate;
         rental.Car.isAvailable = true;
     
         _context.ReturnRecords.Add(returnRecord);
@@ -91,13 +93,31 @@ public class RentalsManagementController : ControllerBase
         car.isAvailable = true;
         
         await _context.SaveChangesAsync();
+        
+        // wyslij wiadomosc do backendu wyszukiwarki z potwierdzeniem zwrotu za pomoca baseUrl w CustomerApi
+        var customerApi = await _context.CustomerApis.FirstOrDefaultAsync(ca => ca.username == rental.rentalName);
+        if (customerApi == null)
+        {
+            return NotFound("Customer API not found");
+        }
+        
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.id == rental.userId);
+
+        var endpoint = customerApi.baseUrl + "api/cars/return/confirmation";
+        var completeReturnDto = new CompleteReturnDto
+        {
+            UserId = user.externalId,
+            EmployeeNotes = returnRecord.EmployeeNotes,
+            ReturnDate = returnRecord.ReturnDate
+        };
+        
+        var response = await _httpClient.PostAsJsonAsync(endpoint, completeReturnDto);
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Error: {response.StatusCode}, Message: {errorMessage}");
+        }
     
         return Ok(_mapper.Map<ReturnRecordDto>(returnRecord));
     }
-    
-    // private async Task<string> UploadPhotoToBlob(IFormFile photo)
-    // {
-    //     // Implement photo upload to Azure Blob Storage
-    //     throw new NotImplementedException();
-    // }
 }

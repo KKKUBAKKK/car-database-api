@@ -28,7 +28,10 @@ else if (builder.Environment.IsProduction())
 }
 
 // Register the DbContext with the connection string from customer secrets
-var connectionString = builder.Configuration.GetConnectionString("DeploymentConnection") + ";TrustServerCertificate=True";
+var connectionString = builder.Environment.IsDevelopment() ?
+    builder.Configuration.GetConnectionString("DevelopmentConnection")  + ";TrustServerCertificate=True":
+    builder.Configuration.GetConnectionString("DeploymentConnection") + ";TrustServerCertificate=True";
+// var connectionString = builder.Configuration.GetConnectionString("DeploymentConnection") + ";TrustServerCertificate=True";
 
 builder.Services.AddDbContext<CarRentalDbContext>(options =>
     options.UseSqlServer(connectionString, sqlOptions =>
@@ -44,6 +47,9 @@ builder.Services.AddControllers();
 
 // Configure AutoMapper
 builder.Services.AddAutoMapper(typeof(Program));
+
+// Register HttpClient
+builder.Services.AddHttpClient();
 
 // Configure JWT Authentication
 var logger = LoggerFactory.Create(b => b.AddConsole()).CreateLogger<Program>();
