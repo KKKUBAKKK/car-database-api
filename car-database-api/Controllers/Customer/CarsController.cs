@@ -29,7 +29,7 @@ public class CarsController(CarRentalDbContext context, IMapper mapper) : Contro
     public async Task<ActionResult<CarDto>> GetCar(int id)
     {
         var car = await context.Cars.FindAsync(id);
-        if (car == null || !car.isAvailable)
+        if (car == null)
         {
             return NotFound();
         }

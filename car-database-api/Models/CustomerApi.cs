@@ -16,5 +16,5 @@ public class CustomerApi
     [Required, StringLength(20)]
     public string password { get; set; }                   // CustomerApi's password
 
-    [Required, StringLength(50)] public string baseUrl { get; set; } = Constants.RentalBaseUrl;
+    [Required, StringLength(80)] public string baseUrl { get; set; } = Constants.RentalBaseUrl;
 }
