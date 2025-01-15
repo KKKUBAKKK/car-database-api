@@ -128,6 +128,17 @@ public class CarsManagementController : ControllerBase
         return Ok(count);
     }
     
+    // Get number of available cars
+    [HttpGet("count/available")]
+    public async Task<ActionResult<int>> GetAvailableCarsCount()
+    {
+        var count = await _context.Cars
+            .Where(c => c.isAvailable)
+            .CountAsync();
+            
+        return Ok(count);
+    }
+    
     // Get x cars with id > lastId and filtered by category
     [HttpGet("next/{lastId:int}/{type}")]
     public async Task<ActionResult<IEnumerable<CarDto>>> GetNextCars(int lastId, CarType type)
