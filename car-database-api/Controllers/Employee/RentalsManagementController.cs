@@ -149,13 +149,13 @@ public class RentalsManagementController : ControllerBase
     }
     
     // Get rental history dto for a specific vehicle
-    // TODO: fix this, right now it returns the same history for all vehicles
     [HttpGet("history/{vehicleId}")]
     public async Task<ActionResult<RentalHistoryDto>> GetVehicleRentalHistory(int vehicleId)
     {
         var rentalHistories = await _context.Rentals
             .Include(r => r.Customer)
             .Include(r => r.ReturnRecord)
+            .Where(r => r.carId == vehicleId)
             .Select(r => new RentalHistoryDto
             {
                 StartDate = r.startDate,
