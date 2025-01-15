@@ -108,8 +108,8 @@ namespace car_database_api.Migrations
 
                     b.Property<string>("baseUrl")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
 
                     b.Property<string>("password")
                         .IsRequired()
