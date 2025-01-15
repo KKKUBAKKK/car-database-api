@@ -102,7 +102,7 @@ public class RentalsController(CarRentalDbContext context, IMapper mapper) : Con
         var rental = new Rental
         {
             carId = offer.carId,
-            userId = request.CustomerId,
+            userId = user.id,
             startDate = request.PlannedStartDate,
             endDate = request.PlannedEndDate,
             totalPrice = (offer.dailyRate + offer.insuranceRate) * 
@@ -125,7 +125,7 @@ public class RentalsController(CarRentalDbContext context, IMapper mapper) : Con
         {
             Id = rental.id,
             CarId = rental.carId,
-            UserId = rental.userId,
+            UserId = user.externalId,
             StartDate = rental.startDate,
             EndDate = rental.endDate,
             TotalPrice = rental.totalPrice,
