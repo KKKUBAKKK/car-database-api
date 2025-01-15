@@ -88,7 +88,7 @@ public class RentalsController(CarRentalDbContext context, IMapper mapper) : Con
             .FirstOrDefaultAsync(u => u.externalId == request.CustomerId && u.rentalName == request.RentalName);
         if (user == null)
         {
-            return Forbid();
+            return NotFound("Customer not found");
         }
         
         var offer = await context.RentalOffers
@@ -96,13 +96,14 @@ public class RentalsController(CarRentalDbContext context, IMapper mapper) : Con
 
         if (offer == null)
         {
-            return BadRequest("Invalid or expired offer");
+            return NotFound("Offer not found or expired");
         }
 
         var rental = new Rental
         {
             carId = offer.carId,
             userId = user.id,
+            rentalName = user.rentalName,
             startDate = request.PlannedStartDate,
             endDate = request.PlannedEndDate,
             totalPrice = (offer.dailyRate + offer.insuranceRate) * 
@@ -129,7 +130,7 @@ public class RentalsController(CarRentalDbContext context, IMapper mapper) : Con
             StartDate = rental.startDate,
             EndDate = rental.endDate,
             TotalPrice = rental.totalPrice,
-            Status = rental.status.ToString(),
+            Status = rental.status,
             StartLocation = rental.startLocation,
             EndLocation = rental.endLocation
         };
