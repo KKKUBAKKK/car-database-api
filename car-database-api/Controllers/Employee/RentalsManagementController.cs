@@ -139,9 +139,10 @@ public class RentalsManagementController : ControllerBase
         var count = await _context.Rentals
             .Where(r => r.status == RentalStatus.pendingReturn)
             .CountAsync();
-    
+
         return Ok(count);
-        
+    }
+
     // Get rentals for a specific vehicle
     [HttpGet("{vehicleId}")]
     public async Task<ActionResult<IEnumerable<RentalDto>>> GetVehicleRentals(int vehicleId)
