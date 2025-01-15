@@ -121,6 +121,27 @@ public class RentalsManagementController : ControllerBase
         return Ok(_mapper.Map<ReturnRecordDto>(returnRecord));
     }
     
+    // Get the numver of the active rentals
+    [HttpGet("active-count")]
+    public async Task<ActionResult<int>> GetActiveRentalsCount()
+    {
+        var count = await _context.Rentals
+            .Where(r => r.status == RentalStatus.inProgress || r.status == RentalStatus.planned)
+            .CountAsync();
+    
+        return Ok(count);
+    }
+    
+    // Get the number of the pending returns
+    [HttpGet("pending-returns-count")]
+    public async Task<ActionResult<int>> GetPendingReturnsCount()
+    {
+        var count = await _context.Rentals
+            .Where(r => r.status == RentalStatus.pendingReturn)
+            .CountAsync();
+    
+        return Ok(count);
+        
     // Get rentals for a specific vehicle
     [HttpGet("{vehicleId}")]
     public async Task<ActionResult<IEnumerable<RentalDto>>> GetVehicleRentals(int vehicleId)
@@ -149,13 +170,13 @@ public class RentalsManagementController : ControllerBase
     }
     
     // Get rental history dto for a specific vehicle
-    // TODO: fix this, right now it returns the same history for all vehicles
     [HttpGet("history/{vehicleId}")]
     public async Task<ActionResult<RentalHistoryDto>> GetVehicleRentalHistory(int vehicleId)
     {
         var rentalHistories = await _context.Rentals
             .Include(r => r.Customer)
             .Include(r => r.ReturnRecord)
+            .Where(r => r.carId == vehicleId)
             .Select(r => new RentalHistoryDto
             {
                 StartDate = r.startDate,
