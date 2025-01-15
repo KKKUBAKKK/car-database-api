@@ -141,5 +141,52 @@ public class RentalsManagementController : ControllerBase
             .CountAsync();
     
         return Ok(count);
+        
+    // Get rentals for a specific vehicle
+    [HttpGet("{vehicleId}")]
+    public async Task<ActionResult<IEnumerable<RentalDto>>> GetVehicleRentals(int vehicleId)
+    {
+        var rentals = await _context.Rentals
+            .Include(r => r.Car)
+            .Include(r => r.Customer)
+            .Where(r => r.carId == vehicleId)
+            .ToListAsync();
+
+        return Ok(_mapper.Map<IEnumerable<RentalDto>>(rentals));
+    }
+    
+    // Get rental records for a specific vehicle
+    [HttpGet("records/{vehicleId}")]
+    public async Task<ActionResult<IEnumerable<ReturnRecordDto>>> GetVehicleReturnRecords(int vehicleId)
+    {
+        var returnRecords = await _context.ReturnRecords
+            .Include(rr => rr.Rental)
+            .Include(rr => rr.Rental.Car)
+            .Include(rr => rr.Rental.Customer)
+            .Where(rr => rr.Rental.carId == vehicleId)
+            .ToListAsync();
+
+        return Ok(_mapper.Map<IEnumerable<ReturnRecordDto>>(returnRecords));
+    }
+    
+    // Get rental history dto for a specific vehicle
+    [HttpGet("history/{vehicleId}")]
+    public async Task<ActionResult<RentalHistoryDto>> GetVehicleRentalHistory(int vehicleId)
+    {
+        var rentalHistories = await _context.Rentals
+            .Include(r => r.Customer)
+            .Include(r => r.ReturnRecord)
+            .Where(r => r.carId == vehicleId)
+            .Select(r => new RentalHistoryDto
+            {
+                StartDate = r.startDate,
+                EndDate = r.endDate,
+                Condition = (r.ReturnRecord != null) ? r.ReturnRecord.Condition:"Not completed",
+                TotalPrice = r.totalPrice,
+                Status = r.status,
+                RenterName = r.Customer.firstName + " " + r.Customer.lastName
+            })
+            .ToListAsync();
+        return Ok(rentalHistories);
     }
 }
