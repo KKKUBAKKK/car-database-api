@@ -134,7 +134,6 @@ public class RentalsController(CarRentalDbContext context, IMapper mapper) : Con
             StartLocation = rental.startLocation,
             EndLocation = rental.endLocation
         };
-            
 
         return Ok(rentalDto);
     }
