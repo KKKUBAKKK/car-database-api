@@ -48,6 +48,9 @@ builder.Services.AddControllers();
 // Configure AutoMapper
 builder.Services.AddAutoMapper(typeof(Program));
 
+// Register HttpClient
+builder.Services.AddHttpClient();
+
 // Configure JWT Authentication
 var logger = LoggerFactory.Create(b => b.AddConsole()).CreateLogger<Program>();
 

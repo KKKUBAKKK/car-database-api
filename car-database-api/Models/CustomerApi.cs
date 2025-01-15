@@ -10,7 +10,7 @@ public class CustomerApi
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int id { get; set; }                    // Unique identifier for each employee
     
-    [Required, StringLength(10)]
+    [Required, StringLength(20)]
     public string username { get; set; }                   // CustomerApi's username (unique)
     
     [Required, StringLength(20)]

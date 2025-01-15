@@ -100,9 +100,16 @@ public class RentalsManagementController : ControllerBase
         {
             return NotFound("Customer API not found");
         }
+        
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.id == rental.userId);
 
         var endpoint = customerApi.baseUrl + "api/cars/return/confirmation";
-        var completeReturnDto = new CompleteReturnDto();
+        var completeReturnDto = new CompleteReturnDto
+        {
+            UserId = user.externalId,
+            EmployeeNotes = returnRecord.EmployeeNotes,
+            ReturnDate = returnRecord.ReturnDate
+        };
         
         var response = await _httpClient.PostAsJsonAsync(endpoint, completeReturnDto);
         if (!response.IsSuccessStatusCode)
