@@ -102,7 +102,7 @@ public class RentalsController(CarRentalDbContext context, IMapper mapper) : Con
         var rental = new Rental
         {
             carId = offer.carId,
-            userId = request.CustomerId,
+            userId = user.id,
             rentalName = user.rentalName,
             startDate = request.PlannedStartDate,
             endDate = request.PlannedEndDate,
@@ -122,7 +122,21 @@ public class RentalsController(CarRentalDbContext context, IMapper mapper) : Con
         offer.isActive = false;
         await context.SaveChangesAsync();
 
-        return Ok(rental);
+        var rentalDto = new RentalDto
+        {
+            Id = rental.id,
+            CarId = rental.carId,
+            UserId = user.externalId,
+            StartDate = rental.startDate,
+            EndDate = rental.endDate,
+            TotalPrice = rental.totalPrice,
+            Status = rental.status,
+            StartLocation = rental.startLocation,
+            EndLocation = rental.endLocation
+        };
+            
+
+        return Ok(rentalDto);
     }
     
     [HttpPost("return")]
