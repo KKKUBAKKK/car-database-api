@@ -53,7 +53,9 @@ public class CarsManagementController : ControllerBase
             return NotFound();
         }
 
-        _mapper.Map(car, existingCar);
+        existingCar.location = car.Location;
+        existingCar.isAvailable = car.IsAvailable;
+        existingCar.type = car.Type;
         await _context.SaveChangesAsync();
         
         return Ok(_mapper.Map<CarDto>(existingCar));
