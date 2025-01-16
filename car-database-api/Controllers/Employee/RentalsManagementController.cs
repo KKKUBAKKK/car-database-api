@@ -118,7 +118,7 @@ public class RentalsManagementController : ControllerBase
         
         var user = await _context.Users.FirstOrDefaultAsync(u => u.id == rental.userId);
 
-        var endpoint = customerApi.baseUrl + "api/cars/return/confirmation";
+        var endpoint = customerApi.baseUrl + "/api/cars/return/confirmation";
         var completeReturnDto = new CompleteReturnDto
         {
             UserId = user.externalId,
