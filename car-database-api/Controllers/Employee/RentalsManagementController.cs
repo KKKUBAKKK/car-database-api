@@ -26,11 +26,12 @@ public class RentalsManagementController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<RentalDto>>> GetAllRentals([FromQuery] RentalFilterDto filter)
+    public async Task<ActionResult<IEnumerable<RentalDetailsDto>>> GetAllRentals([FromQuery] RentalFilterDto filter)
     {
         var query = _context.Rentals
             .Include(r => r.Car)
             .Include(r => r.Customer)
+            .Include(r => r.ReturnRecord)
             .AsQueryable();
 
         if (filter.Status.HasValue)
@@ -39,7 +40,21 @@ public class RentalsManagementController : ControllerBase
         }
 
         var rentals = await query.ToListAsync();
-        return Ok(_mapper.Map<IEnumerable<RentalDto>>(rentals));
+        return Ok(_mapper.Map<IEnumerable<RentalDetailsDto>>(rentals));
+        
+        // var query = _context.Rentals
+        //     .Include(r => r.Car)
+        //     .Include(r => r.Customer)
+        //     .Include(r => r.ReturnRecord)
+        //     .AsQueryable();
+        //
+        // if (filter.Status.HasValue)
+        // {
+        //     query = query.Where(r => r.status == filter.Status);
+        // }
+        //
+        // var rentals = await query.ToListAsync();
+        // return Ok(_mapper.Map<IEnumerable<RentalDto>>(rentals));
     }
 
     [HttpGet("pending-returns")]
@@ -189,5 +204,28 @@ public class RentalsManagementController : ControllerBase
             })
             .ToListAsync();
         return Ok(rentalHistories);
+    }
+    
+    // Get all returnRecords
+    [HttpGet("return-records")]
+    public async Task<ActionResult<IEnumerable<ReturnRecordDto>>> GetAllReturnRecords()
+    {
+        var returnRecords = await _context.ReturnRecords
+            .Include(rr => rr.Rental)
+            .Include(rr => rr.Rental.Car)
+            .Include(rr => rr.Rental.Customer)
+            .ToListAsync();
+
+        return Ok(_mapper.Map<IEnumerable<ReturnRecordDto>>(returnRecords));
+    }
+    
+    // Get all uers
+    [HttpGet("users")]
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers()
+    {
+        var users = await _context.Users
+            .ToListAsync();
+
+        return Ok(_mapper.Map<IEnumerable<UserDto>>(users));
     }
 }
