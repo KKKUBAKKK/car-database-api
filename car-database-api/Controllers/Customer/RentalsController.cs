@@ -78,7 +78,30 @@ public class RentalsController(CarRentalDbContext context, IMapper mapper) : Con
         context.RentalOffers.Add(offer);
         await context.SaveChangesAsync();
 
-        return Ok(offer);
+        var carDto = new CarDto
+        {
+            Id = car.id,
+            RentalService = Constants.RentalName,
+            Producer = car.producer,
+            Model = car.model,
+            YearOfProduction = car.yearOfProduction,
+            NumberOfSeats = car.numberOfSeats,
+            Type = car.type,
+            IsAvailable = car.isAvailable,
+            Location = car.location
+        };
+        
+        var rentalOfferDto = new RentalOfferDto
+        {
+            Id = offer.id,
+            Car = carDto,
+            DailyRate = offer.dailyRate,
+            InsuranceRate = offer.insuranceRate,
+            TotalCost = offer.dailyRate + offer.insuranceRate,
+            ValidUntil = offer.validUntil
+        };
+
+        return Ok(rentalOfferDto);
     }
 
     [HttpPost]
@@ -139,20 +162,27 @@ public class RentalsController(CarRentalDbContext context, IMapper mapper) : Con
     }
     
     [HttpPost("return")]
-    public async Task<ActionResult<ReturnRecordDto>> ReturnCar([FromBody] ReturnRequestDto request)
+    public async Task<ActionResult<ReturnRequestDto>> ReturnCar([FromBody] ReturnRequestDto request)
     {
         var rental = await context.Rentals
             // .Include(r => r.Car)
-            .FirstOrDefaultAsync(r => r.id == request.RentalId && r.status == RentalStatus.inProgress);
+            .FirstOrDefaultAsync(r => r.id == request.RentalId && 
+                                      (r.status == RentalStatus.inProgress || r.status == RentalStatus.planned));
     
         if (rental == null)
         {
             rental = await context.Rentals
-                // .Include(r => r.Car)
                 .FirstOrDefaultAsync(r => r.id == request.RentalId && r.status == RentalStatus.pendingReturn);
             if (rental != null)
             {
                 return Ok("Rental already pending return");
+            }
+            
+            rental = await context.Rentals
+                .FirstOrDefaultAsync(r => r.id == request.RentalId && r.status == RentalStatus.ended);
+            if (rental != null)
+            {
+                return Ok("Rental already ended");
             }
             
             return NotFound("Rental not found or not in progress");
@@ -162,6 +192,6 @@ public class RentalsController(CarRentalDbContext context, IMapper mapper) : Con
     
         await context.SaveChangesAsync();
     
-        return Ok(rental);
+        return Ok(request);
     }
 }
