@@ -8,6 +8,7 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
+        CreateMap<Rental, RentalDetailsDto>();
         CreateMap<Car, CarDto>();
         CreateMap<CarCreateDto, Car>();
         // CreateMap<Car, CarDetailsDto>();

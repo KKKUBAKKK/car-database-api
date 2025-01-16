@@ -43,7 +43,7 @@ public class CarRentalCalculator
             _ => 1.0
         };
         
-        return (decimal) (DefaultBaseRate * carTypeMultiplier * ageMultiplier * driverAgeMultiplier);
+        return (decimal) (DefaultBaseRate * carTypeMultiplier * ageMultiplier * driverAgeMultiplier / 1e4);
     }
 
     public static decimal CalculateDailyInsuranceRate(Car car, Customer customer)
@@ -80,6 +80,6 @@ public class CarRentalCalculator
             _ => 1.0
         };
         
-        return (decimal) (DefaultInsuranceRate * carTypeMultiplier * ageMultiplier * driverAgeMultiplier);
+        return (decimal) (DefaultInsuranceRate * carTypeMultiplier * ageMultiplier * driverAgeMultiplier / 1e4);
     }
 }
