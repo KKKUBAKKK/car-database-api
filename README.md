@@ -1,5 +1,11 @@
 # Car Rental API
 
+## Link to deployed employee app (another project using this one)
+[Employee App](employee-app-eegsgzadcefrbfak.polandcentral-01.azurewebsites.net)
+
+## Link to deplyed customer app (another project using this one)
+[Customer App](http://molczane.github.io)
+
 ## Objective
 The Car Rental API is designed to manage car rental operations, including user authentication, car management, rental processing, and return handling. It provides endpoints for both customers and employees to interact with the system.
 
