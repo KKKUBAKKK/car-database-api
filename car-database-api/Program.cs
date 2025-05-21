@@ -8,6 +8,9 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add AWS configuration
+builder.Configuration.AddSystemsManager("/your-app/config");
+
 // Load configuration from appsettings.json
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
@@ -88,7 +91,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Car Rental API", Version = "v1" });
-    
+
     // Add JWT Authentication to Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -98,7 +101,7 @@ builder.Services.AddSwaggerGen(c =>
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
     });
-    
+
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -114,7 +117,7 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-    
+
 // Build the service provider
 var app = builder.Build();
 

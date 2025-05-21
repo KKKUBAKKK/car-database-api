@@ -1,0 +1,10 @@
+{
+  "region": "us-east-1",
+  "application": "car-database-api",
+  "environment": "car-database-api-prod",
+  "solution-stack": "64bit Amazon Linux 2 v2.5.3 running .NET Core",
+  "ec2-key-pair": "",
+  "instance-type": "t2.micro",
+  "instance-profile": "aws-elasticbeanstalk-ec2-role",
+  "service-role": "aws-elasticbeanstalk-service-role"
+}
